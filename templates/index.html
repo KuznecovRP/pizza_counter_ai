@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Пицца-детектор</title>
+</head>
+<body>
+    <h1>Подсчёт пицц: изображение</h1>
+    <input type="file" id="imageInput">
+    <button onclick="processImage()">Обработать фото</button>
+    <div id="imageStats"></div>
+    <img id="resultImage" src="" width="500"><br><br>
+
+    <h1>Подсчёт пицц: видео</h1>
+    <input type="file" id="videoInput">
+    <button onclick="processVideo()">Обработать видео</button>
+    <div id="videoStats"></div>
+    <video id="resultVideo" width="500" controls></video>
+
+    <script>
+    async function processImage() {
+        const file = document.getElementById('imageInput').files[0];
+        const formData = new FormData();
+        formData.append('image', file);
+
+        const response = await fetch('/process_image', {
+            method: 'POST',
+            body: formData
+        });
+
+        const data = await response.json();
+        document.getElementById('resultImage').src = 'static/result.jpg?' + Date.now();
+        document.getElementById('imageStats').innerText = 'Найдено пицц: ' + data.count;
+    }
+
+    async function processVideo() {
+        const file = document.getElementById('videoInput').files[0];
+        const formData = new FormData();
+        formData.append('video', file);
+
+        const response = await fetch('/process_video', {
+            method: 'POST',
+            body: formData
+        });
+
+        const data = await response.json();
+        document.getElementById('resultVideo').src = '/result_video?' + Date.now();
+        document.getElementById('videoStats').innerText = 'Найдено пицц (всего): ' + data.count;
+    }
+    </script>
+</body>
+</html>
