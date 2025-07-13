@@ -16,8 +16,17 @@
     <div id="videoStats"></div>
     <video id="resultVideo" width="500" controls></video>
 
+    <div id="loading" style="display:none; color: green; font-weight: bold; margin-top: 10px;">
+      Обработка...
+    </div>
+
+    <hr>
+    <a href="/report/pdf" target="_blank">Скачать PDF отчёт</a><br>
+    <a href="/report/excel" target="_blank">Скачать Excel отчёт</a>
+
     <script>
     async function processImage() {
+        document.getElementById('loading').style.display = 'block';  // показать индикатор
         const file = document.getElementById('imageInput').files[0];
         const formData = new FormData();
         formData.append('image', file);
@@ -30,9 +39,11 @@
         const data = await response.json();
         document.getElementById('resultImage').src = 'static/result.jpg?' + Date.now();
         document.getElementById('imageStats').innerText = 'Найдено пицц: ' + data.count;
+        document.getElementById('loading').style.display = 'none';  // скрыть индикатор
     }
 
     async function processVideo() {
+        document.getElementById('loading').style.display = 'block';  // показать индикатор
         const file = document.getElementById('videoInput').files[0];
         const formData = new FormData();
         formData.append('video', file);
@@ -45,6 +56,7 @@
         const data = await response.json();
         document.getElementById('resultVideo').src = '/result_video?' + Date.now();
         document.getElementById('videoStats').innerText = 'Найдено пицц (всего): ' + data.count;
+        document.getElementById('loading').style.display = 'none';  // скрыть индикатор
     }
     </script>
 </body>
